@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Protection de l'accès : redirige vers le login si non connecté
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
@@ -18,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'ajouter_categorie') {
         $nomCat = trim($_POST['nom_categorie']);
         if (!empty($nomCat)) {
-            // INSERT IGNORE évite les erreurs si le nom existe déjà
             $stmt = $pdo->prepare("INSERT IGNORE INTO categories (nom) VALUES (:nom)");
             $stmt->execute([':nom' => $nomCat]);
         }
@@ -28,30 +26,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'ajouter_livre') {
         $titre = trim($_POST['titre']);
         $auteur = trim($_POST['auteur']);
-        $id_categorie = (int)$_POST['id_categorie'];
+        $id_categorie = (int)$_POST['id_categorie'];//(int) : Transtypage en entier pour des raisons de sécurité.
         $image_url = '';
-    // Traitement du fichier uploadé
-        if (isset($_FILES['image_fichier']) && $_FILES['image_fichier']['error'] === UPLOAD_ERR_OK) {
-            $extension = strtolower(pathinfo($_FILES['image_fichier']['name'], PATHINFO_EXTENSION));
+
+        if (isset($_FILES['image_fichier']) && $_FILES['image_fichier']['error'] === UPLOAD_ERR_OK) {//UPLOAD_ERR_OK : Vérifie que l'image s'est bien téléchargée sur le serveur.
+            $extension = strtolower(pathinfo($_FILES['image_fichier']['name'], PATHINFO_EXTENSION));//pathinfo(..., PATHINFO_EXTENSION) : Extrait l'extension du fichier (ex: .jpg).
             $extensions_autorisees = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-        // Donne un nom unique au fichier pour éviter les collisions
+
             if (in_array($extension, $extensions_autorisees)) {
-                $nom_fichier = uniqid('img_') . '.' . $extension;
+                $nom_fichier = uniqid('img_') . '.' . $extension;//uniqid('img_') : Génère un identifiant unique basé sur le temps pour éviter que deux images de même nom ne se chevauchent ou s'écrasent.
                 $dossier_destination = 'uploads/' . $nom_fichier;
-        // Déplace le fichier temporaire vers le dossier permanent
-                if (move_uploaded_file($_FILES['image_fichier']['tmp_name'], $dossier_destination)) {
+
+                if (move_uploaded_file($_FILES['image_fichier']['tmp_name'], $dossier_destination)) {//move_uploaded_file() : Déplace l'image du dossier temporaire système vers le dossier uploads/ du projet.
                     $image_url = $dossier_destination;
                 }
             }
         }
-   
+
         if (!empty($titre) && !empty($auteur)) {
             $stmt = $pdo->prepare("INSERT INTO livres (titre, auteur, image_url, id_categorie) VALUES (:titre, :auteur, :image_url, :id_cat)");
             $stmt->execute([
                 ':titre' => $titre,
                 ':auteur' => $auteur,
                 ':image_url' => $image_url,
-                ':id_cat' => $id_categorie > 0 ? $id_categorie : null // Gestion de l'option "sans catégorie"[
+                ':id_cat' => $id_categorie > 0 ? $id_categorie : null
             ]);
         }
     }
@@ -63,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $auteur = trim($_POST['auteur']);
         $id_categorie = (int)$_POST['id_categorie'];
         $image_url = $_POST['ancienne_image'] ?? '';
-    // Remplacement de l'image si un nouveau fichier est envoy
+
         if (isset($_FILES['image_fichier']) && $_FILES['image_fichier']['error'] === UPLOAD_ERR_OK) {
             $extension = strtolower(pathinfo($_FILES['image_fichier']['name'], PATHINFO_EXTENSION));
             $extensions_autorisees = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
@@ -73,9 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $dossier_destination = 'uploads/' . $nom_fichier;
 
                 if (move_uploaded_file($_FILES['image_fichier']['tmp_name'], $dossier_destination)) {
-                // Supprime l'ancien fichier sur le disque s'il existe   
-                if (!empty($image_url) && file_exists($image_url)) {
-                        unlink($image_url);
+                    if (!empty($image_url) && file_exists($image_url)) {
+                        unlink($image_url);//unlink($image_url) : Supprime le fichier image obsolète du serveur pour ne pas encombrer le disque dur inutiles.
                     }
                     $image_url = $dossier_destination;
                 }
@@ -98,20 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($_POST['action'] === 'supprimer_livre') {
         $id = (int)$_POST['id'];
         if ($id > 0) {
-            // Récupère l'image pour la supprimer du disque
             $stmt = $pdo->prepare("SELECT image_url FROM livres WHERE id = :id");
             $stmt->execute([':id' => $id]);
             $livre = $stmt->fetch();
 
             if ($livre && !empty($livre['image_url']) && file_exists($livre['image_url'])) {
-                unlink($livre['image_url']);// Suppression physiquement du fichier
+                unlink($livre['image_url']);
             }
-        // Suppression en BDD
+
             $stmt = $pdo->prepare("DELETE FROM livres WHERE id = :id");
             $stmt->execute([':id' => $id]);
         }
     }
-    // Pattern Post/Redirect/Get (PRG) pour éviter les re-soumissions de formulaires au rafraîchissement
+
     header('Location: index.php');
     exit;
 }
@@ -128,12 +124,12 @@ $sql = "SELECT livres.*, categories.nom AS categorie_nom
         WHERE 1=1";
 
 $params = [];
-// Filtre texte
+
 if (!empty($recherche)) {
     $sql .= " AND (livres.titre LIKE :q OR livres.auteur LIKE :q)";
     $params[':q'] = '%' . $recherche . '%';
 }
-// Filtre par catégorie
+
 if ($catFiltre > 0) {
     $sql .= " AND livres.id_categorie = :cat";
     $params[':cat'] = $catFiltre;
@@ -145,15 +141,13 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $livres = $stmt->fetchAll();
 
-// Récupération des catégories pour la liste déroulante
 $categories = $pdo->query("SELECT * FROM categories ORDER BY nom ASC")->fetchAll();
 
-// Si un livre est en cours d'édition (clic sur "Modifier")
 $livreAEditer = null;
 if (isset($_GET['edit_id'])) {
     $stmt = $pdo->prepare("SELECT * FROM livres WHERE id = :id");
     $stmt->execute([':id' => (int)$_GET['edit_id']]);
     $livreAEditer = $stmt->fetch();
 }
-// Charge le fichier de présentation HTML
+
 require_once 'view.php';
