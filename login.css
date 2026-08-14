@@ -1,56 +1,692 @@
-body { 
-    background: #0f172a; 
-    color: #f8fafc;
-    font-family: system-ui, sans-serif; 
-    display: flex; 
+:root {
+    --brown-dark: #2f2119;
+    --brown: #5a3827;
+    --brown-soft: #80624b;
+    --burgundy: #713747;
+    --burgundy-dark: #542536;
+    --cream: #f8f2e7;
+    --paper: #fffdf8;
+    --gold: #b98a45;
+    --gold-light: #d6b477;
+    --line: #d9c9b5;
+    --muted: #807268;
+}
+:root {
+    --brown-dark: #2f2119;
+    --brown: #5a3827;
+    --brown-soft: #80624b;
+    --burgundy: #713747;
+    --burgundy-dark: #542536;
+    --cream: #f8f2e7;
+    --paper: #fffdf8;
+    --gold: #b98a45;
+    --gold-light: #d6b477;
+    --line: #d9c9b5;
+    --muted: #807268;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--brown-dark);
+    font-family: "Inter", sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(185, 138, 69, .16),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 88% 80%,
+            rgba(113, 55, 71, .10),
+            transparent 27%
+        ),
+        linear-gradient(
+            135deg,
+            #e5dac9 0%,
+            #f7f1e7 46%,
+            #ded0bd 100%
+        );
+}
+
+
+/* Texture légère du fond */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .18;
+
+    background-image:
+        linear-gradient(
+            rgba(71, 47, 34, .04) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(71, 47, 34, .025) 1px,
+            transparent 1px
+        );
+
+    background-size: 25px 25px;
+}
+
+
+/* Conteneur principal */
+
+.login-page {
+    min-height: 100vh;
+
+    display: grid;
+    place-items: center;
+
+    padding: 34px 18px 25px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Cercles décoratifs */
+
+.ambient {
+    position: absolute;
+
+    width: 380px;
+    height: 380px;
+
+    border-radius: 50%;
+
+    filter: blur(2px);
+
+    opacity: .32;
+
+    pointer-events: none;
+}
+
+.ambient-one {
+    left: -190px;
+    top: 15%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(113, 55, 71, .12),
+            transparent 65%
+        );
+}
+
+.ambient-two {
+    right: -190px;
+    bottom: 5%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(185, 138, 69, .14),
+            transparent 65%
+        );
+}
+
+
+/* Carte du login */
+
+.login-card {
+    width: min(100%, 470px);
+
+    position: relative;
+
+    padding: 38px 46px 29px;
+
+    background:
+        linear-gradient(
+            rgba(255, 253, 248, .97),
+            rgba(250, 245, 236, .97)
+        );
+
+    border: 1px solid #d4c4ae;
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 28px 70px rgba(55, 37, 27, .19),
+        0 3px 0 rgba(185, 138, 69, .55);
+
+    text-align: center;
+}
+
+
+/* Bordure intérieure */
+
+.login-card::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 10px;
+
+    border: 1px solid rgba(185, 138, 69, .25);
+
+    pointer-events: none;
+}
+
+
+/* Ligne dorée supérieure */
+
+.login-card::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 12%;
+    right: 12%;
+
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+}
+
+
+/* Emblème supérieur */
+
+.crest {
+    display: flex;
+
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
-  }
 
-.card {
-    background: #1e293b;
-    padding: 2rem; 
-    border-radius: 12px; 
-    width: 100%; 
-    max-width: 350px;
-    border: 1px solid #334155;
- }
-.form-group { 
-    margin-bottom: 1rem; 
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+.crest-line {
+    width: 62px;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold)
+        );
+}
+
+.crest-line:last-child {
+    background:
+        linear-gradient(
+            90deg,
+            var(--gold),
+            transparent
+        );
+}
+
+.crest-symbol {
+    color: var(--gold);
+
+    font-size: 21px;
+}
+
+
+/* Nom de la bibliothèque */
+
+.brand-small {
+    color: var(--burgundy);
+
+    font-size: .63rem;
+
+    font-weight: 700;
+
+    letter-spacing: .24em;
+}
+
+.brand h1 {
+    margin: 6px 0 0;
+
+    color: var(--brown-dark);
+
+    font:
+        700 3.25rem/.76
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    letter-spacing: -.025em;
+}
+
+.brand h1 em {
+    color: var(--burgundy);
+
+    font-weight: 600;
+}
+
+.brand p {
+    margin: 17px 0 0;
+
+    color: var(--muted);
+
+    font:
+        500 1rem
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+    letter-spacing: .04em;
+}
+
+
+/* Séparateur décoratif */
+
+.ornament {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem; 
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    margin: 23px 0 25px;
 }
-input {
-    background: #0f172a; 
-    border: 1px solid #334155; 
-    color: #fff;
-    padding: 0.75rem;
-    border-radius: 6px;
+
+.ornament span {
+    width: 75px;
+    height: 1px;
+
+    background: var(--line);
 }
-button {
-    background: #6366f1;
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    border-radius: 6px; 
+
+.ornament i {
+    color: var(--gold);
+
+    font-size: 8px;
+
+    font-style: normal;
+}
+
+
+/* Section connexion */
+
+.login-form {
+    text-align: left;
+}
+
+.welcome {
+    text-align: center;
+
+    margin-bottom: 21px;
+}
+
+.welcome h2 {
+    margin: 0;
+
+    color: var(--brown-dark);
+
+    font:
+        700 1.75rem
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+}
+
+.welcome p {
+    margin: 2px 0 0;
+
+    color: var(--muted);
+
+    font-size: .72rem;
+}
+
+
+/* Champs */
+
+.field {
+    margin-bottom: 15px;
+}
+
+.field label {
+    display: block;
+
+    margin: 0 0 7px 3px;
+
+    color: #675b50;
+
+    font-size: .69rem;
+
+    font-weight: 700;
+
+    letter-spacing: .07em;
+
+    text-transform: uppercase;
+}
+
+
+/* Conteneur des inputs */
+
+.input-wrap {
+    position: relative;
+}
+
+
+/* Petite icône à gauche */
+
+.input-icon {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--gold);
+
+    font-size: 17px;
+
+    pointer-events: none;
+}
+
+
+/* Inputs */
+
+.input-wrap input {
+    width: 100%;
+    height: 48px;
+
+    padding: 0 43px;
+
+    border: 1px solid var(--line);
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: rgba(255, 253, 248, .9);
+
+    color: var(--brown-dark);
+
+    font:
+        500 .82rem
+        "Inter",
+        sans-serif;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.input-wrap input::placeholder {
+    color: #a69a8e;
+}
+
+.input-wrap input:focus {
+    border-color: var(--gold);
+
+    background: #fff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(185, 138, 69, .11);
+}
+
+
+/* Bouton afficher mot de passe */
+
+.toggle-password {
+    position: absolute;
+
+    right: 8px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 31px;
+    height: 31px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #a09080;
+
     cursor: pointer;
-    font-weight: bold;
-    width: 100%; 
-    margin-top: 1rem; 
+
+    font-size: 14px;
 }
-button:hover { 
-    background: #4f46e5; 
+
+.toggle-password:hover {
+    color: var(--burgundy);
 }
-.error {
-    color: #ef4444;
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
+
+
+/* Bouton connexion */
+
+.login-button {
+    width: 100%;
+    height: 50px;
+
+    margin-top: 8px;
+
+    padding: 0 17px;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 18px;
+
+    color: #fffaf3;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--burgundy),
+            var(--burgundy-dark)
+        );
+
+    box-shadow:
+        0 10px 20px
+        rgba(113, 55, 71, .18);
+
+    font:
+        700 .76rem
+        "Inter",
+        sans-serif;
+
+    letter-spacing: .045em;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
 }
-p{
-    color: #94a3b8; 
-    font-size: 0.85rem; 
-    margin-bottom: 1rem;
+
+.login-button b {
+    font-size: 18px;
+
+    font-weight: 400;
+
+    transition:
+        transform .2s ease;
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 25px
+        rgba(113, 55, 71, .23);
+
+    filter: brightness(1.04);
+}
+
+.login-button:hover b {
+    transform: translateX(4px);
+}
+
+
+/* Message d'erreur */
+
+.error-message {
+    display: flex;
+
+    gap: 9px;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+
+    padding: 10px 12px;
+
+    border: 1px solid #e3c3bd;
+
+    border-radius: 7px;
+
+    background: #f9e9e5;
+
+    color: #87453e;
+
+    font-size: .72rem;
+
+    text-align: left;
+}
+
+.error-message > span {
+    width: 20px;
+    height: 20px;
+
+    flex: 0 0 20px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #b45c51;
+
+    color: white;
+
+    font-weight: 700;
+}
+
+
+/* Décoration inférieure */
+
+.bottom-ornament {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 27px;
+}
+
+.bottom-ornament span {
+    color: var(--gold);
+
+    font-size: 10px;
+}
+
+.bottom-ornament p {
+    margin: 0;
+
+    color: #a08f7d;
+
+    font-size: .52rem;
+
+    letter-spacing: .12em;
+
+    font-weight: 700;
+}
+
+
+/* Footer */
+
+.login-page > footer {
+    position: absolute;
+
+    bottom: 10px;
+
+    color: #8a7968;
+
+    font-size: .55rem;
+
+    font-weight: 700;
+
+    letter-spacing: .13em;
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 520px) {
+
+    .login-page {
+        padding: 18px 12px 45px;
+    }
+
+    .login-card {
+        padding: 31px 25px 25px;
+    }
+
+    .brand h1 {
+        font-size: 2.7rem;
+    }
+
+    .brand p {
+        font-size: .9rem;
+    }
+
+    .ornament span {
+        width: 55px;
+    }
+}
+
+
+@media (max-width: 360px) {
+
+    .login-card {
+        padding-left: 19px;
+        padding-right: 19px;
+    }
+
+    .brand h1 {
+        font-size: 2.35rem;
+    }
+
 }
