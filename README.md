@@ -24,10 +24,10 @@
 ├── uploads/            # Dossier de stockage des images envoyées
 ├── db.php              # Connexion PDO à la base de données MySQL
 ├── schema.sql          # Script SQL de création des tables et données de test
-├── creer_admin.php     # Script de secours pour réinitialiser l'administrateur
+├── creer_admin.php     # Script de secours pour réinitialiser l'administrateur,effectue le hachage du mot de passe
 ├── index.php           # Logique métier (CRUD, requêtes GET/POST, sessions)
 ├── view.php            # Vue HTML principale de la bibliothèque
-├── login.php           # Traitement et vue de la page de connexion
+├── login.php           # Traitement et vue de la page de connexion(Sécurisation hachage sel & poivre)
 ├── logout.php          # Déconnexion
 ├── view.css            # Styles de l'interface principale
 └── login.css           # Styles de la page de connexion
