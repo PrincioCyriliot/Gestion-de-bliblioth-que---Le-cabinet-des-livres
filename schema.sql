@@ -1,4 +1,4 @@
--- 1. Création de la base de données (si tu utilises MySQL / MariaDB)
+-- 1. Création de la base de données 
 CREATE DATABASE IF NOT EXISTS ma_bibliotheque;
 USE ma_bibliotheque;
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS livres (
 );
 
 -- =========================================================
--- JEU DE DONNÉES PAR DÉFAUT (DONNÉES DE TEST)
+--  DONNÉES PAR DÉFAUT (DONNÉES DE TEST)
 -- =========================================================
 
 -- Insertion des catégories initiales
