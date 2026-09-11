@@ -4,6 +4,8 @@
 > Une interface élégante pour organiser votre collection de livres, vos rayons et vos couvertures d'ouvrages.
 
 ---
+Avant tout ,il faudra creer la base de données,comprise dans le fichier schéma.sql puis après générer le hash via crer_admin.php ou inscription.php
+démarrer le serveur local sous xampp et lancer le fichier principal depuis le seveur local.
 
 ## 🌟 Fonctionnalités
 
